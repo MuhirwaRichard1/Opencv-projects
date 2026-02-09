@@ -1,0 +1,13 @@
+from enum import Enum
+
+class CameraPosition(Enum):
+    INVALID_POS = 0
+    CAMERA_FRONT_LEFT = 1
+    CAMERA_FRONT = 2
+    CAMERA_FRONT_RIGHT = 3
+    CAMERA_BACK_LEFT = 4
+    CAMERA_BACK = 5
+    CAMERA_BACK_RIGHT = 6
+    CAMERA_LEFT_SIDE_MIDDLE = 7
+    CAMERA_RIGHT_SIDE_MIDDLE = 8
+
