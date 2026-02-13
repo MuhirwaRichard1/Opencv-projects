@@ -55,7 +55,7 @@ def parse_tracks(results):
     detections = []
     if results[0].boxes is None or results[0].boxes.id is None:
         return detections
-
+    # Each detection dict: {"id": track_id, "box": [x1, y1, x2, y2], "conf": confidence, "cls": class_id}
     boxes = results[0].boxes
     for i in range(len(boxes)):
         detections.append({
@@ -141,6 +141,7 @@ def main():
     cv2.namedWindow(window_name)
     cv2.setMouseCallback(window_name, mouse_callback)
 
+    # Tracking state
     locked_track_id = None
     frames_lost = 0
     max_lost_frames = 30
@@ -197,7 +198,7 @@ def main():
                         cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
 
         elif locked_track_id is not None:
-            # Target was locked but not found this frame
+            # Target was locked but not found this exact frame
             frames_lost += 1
             if frames_lost < max_lost_frames:
                 cv2.putText(frame, f"Target occluded ({frames_lost}/{max_lost_frames})",
@@ -221,6 +222,8 @@ def main():
 
         # Key handling
         key = cv2.waitKey(1) & 0xFF
+
+        # Quit or clear target
         if key == ord("q"):
             break
         elif key == ord("c"):
