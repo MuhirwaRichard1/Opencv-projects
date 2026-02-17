@@ -15,10 +15,12 @@ def calibrate_camera(images, chessboard_size, square_size):
     objp[:, :2] = np.mgrid[0:chessboard_size[0], 0:chessboard_size[1]].T.reshape(-1, 2)
     objp *= square_size
 
+    # Find chessboard corners in the calibration images
     for img in images:
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         ret, corners = cv2.findChessboardCorners(gray, chessboard_size, None)
 
+        # If found, add object points and image points
         if ret:
             obj_points.append(objp)
             img_points.append(corners)
@@ -32,9 +34,13 @@ def detect_aruco_markers(frame, mtx, dist):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     corners, ids, rejected = cv2.aruco.detectMarkers(gray, aruco_dict, parameters=aruco_params)
 
+    # If markers are detected, draw them and estimate pose
     if ids is not None:
         cv2.aruco.drawDetectedMarkers(frame, corners, ids)
+        # Estimate pose of each marker
         rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(corners, 0.05, mtx, dist)
+
+        # Draw axes for each marker
         for i in range(len(ids)):
             cv2.drawFrameAxes(frame, mtx, dist, rvecs[i], tvecs[i], 0.1)
     return frame, ids, corners
