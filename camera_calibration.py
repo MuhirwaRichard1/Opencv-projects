@@ -12,7 +12,9 @@ def calibrate_camera(images, chessboard_size, square_size):
 
     # Prepare object points (0,0,0), (1,0,0), ..., (8,5,0)
     objp = np.zeros((chessboard_size[0] * chessboard_size[1], 3), np.float32)
+    # Create a grid of points corresponding to the chessboard corners
     objp[:, :2] = np.mgrid[0:chessboard_size[0], 0:chessboard_size[1]].T.reshape(-1, 2)
+    # Scale the object points by the size of a square in meters
     objp *= square_size
 
     # Find chessboard corners in the calibration images
